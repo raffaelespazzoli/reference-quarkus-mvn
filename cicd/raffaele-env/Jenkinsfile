@@ -1,0 +1,27 @@
+// Load the Ploigos Jenkins Library
+library identifier: 'ploigos-jenkins-library@v0.21.0',
+retriever: modernSCM([
+    $class: 'GitSCMSource',
+    remote: 'https://github.com/ploigos/ploigos-jenkins-library.git'
+])
+
+// run the pipeline
+ploigosWorkflowTypical(
+    stepRunnerConfigDir: 'cicd/raffaele-env/ploigos-step-runner-config/',
+
+    pgpKeysSecretName: 'ploigos-gpg-key',
+    workflowServiceAccountName: 'jenkins',
+
+    workflowWorkerImageDefault: 'quay.io/ploigos/ploigos-base:v0.21',
+    workflowWorkerImageAgent: 'quay.io/ploigos/ploigos-ci-agent-jenkins:v0.21',
+    workflowWorkerImageUnitTest: 'quay.io/ploigos/ploigos-tool-maven:v0.21',
+    workflowWorkerImagePackage: 'quay.io/ploigos/ploigos-tool-maven:v0.21',
+    workflowWorkerImageStaticCodeAnalysis: 'quay.io/ploigos/ploigos-tool-sonar:v0.21',
+    workflowWorkerImagePushArtifacts: 'quay.io/ploigos/ploigos-tool-maven:v0.21',
+    workflowWorkerImageContainerOperations: 'quay.io/ploigos/ploigos-tool-containers:v0.21',
+    workflowWorkerImageContainerImageStaticVulnerabilityScan: 'quay.io/ploigos/ploigos-tool-openscap:v0.21',
+    workflowWorkerImageDeploy: 'quay.io/ploigos/ploigos-tool-argocd:v0.21',
+    workflowWorkerImageUAT: 'quay.io/ploigos/ploigos-tool-maven:v0.21',
+
+    separatePlatformConfig: true
+)
